@@ -29,6 +29,16 @@ function runTemplate($template)
     return $inhalt;
 }
 
+function addMessage($type, $content) {
+    // TODO mehrere messages gleichzeitig
+    if (isset($_SESSION['message'])) {
+        $_SESSION['message'] = ["type" => $type, "content" => $content];
+    } else {
+        $_SESSION['message'] = ["type" => $type, "content" => $content];
+    }
+
+}
+
 /*
  * Einen Wert im globalen Array $params speichern.
  *

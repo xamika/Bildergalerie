@@ -20,8 +20,20 @@ function registration() {
  * Beinhaltet die Anwendungslogik zum Login
  */
 function login() {
+	if (isset($_POST['login'])) {
+		$login = true;
+	} else {
+		$login = false;
+	}
+
 	// Das Forum wird ohne Angabe der Funktion aufgerufen bzw. es wurde auf die Schaltfläche "abbrechen" geklickt
 	setValue('phpmodule', $_SERVER['PHP_SELF']."?id=".__FUNCTION__);
+
+	if ($login) {
+		addMessage("success", "Sie haben sich erfolgreich angemeldet.");
+	} else {
+		addMessage("danger", "Username oder Passwort sind nicht korrekt.");
+	}
 	return runTemplate( "../templates/login.htm.php" );
 }
 
