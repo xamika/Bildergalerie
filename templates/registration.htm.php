@@ -15,18 +15,7 @@
         <div class="cols-sm-10">
             <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
-                <input type="text" class="form-control" name="email" id="email" placeholder="Enter your Email"/>
-            </div>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label for="username" class="cols-sm-2 control-label">Username</label>
-        <div class="cols-sm-10">
-            <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
-                <input type="text" class="form-control" name="username" id="username"
-                       placeholder="Enter your Username"/>
+                <input type="email" class="form-control" name="email" id="email" placeholder="Enter your Email" required/>
             </div>
         </div>
     </div>
@@ -37,7 +26,7 @@
             <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
                 <input type="password" class="form-control" name="password" id="password"
-                       placeholder="Enter your Password"/>
+                       placeholder="Enter your Password" required/>
             </div>
         </div>
     </div>
@@ -48,7 +37,7 @@
             <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
                 <input type="password" class="form-control" name="confirm" id="confirm"
-                       placeholder="Confirm your Password"/>
+                       placeholder="Confirm your Password" required/>
             </div>
         </div>
     </div>

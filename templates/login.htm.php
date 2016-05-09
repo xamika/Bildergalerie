@@ -5,7 +5,8 @@
         <div class="cols-sm-10">
             <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
-                <input type="text" class="form-control" name="email" id="email" placeholder="Enter your Email"/>
+                <input type="email" class="form-control" name="email" id="email" placeholder="Enter your Email"
+                       required/>
             </div>
         </div>
     </div>
@@ -17,7 +18,7 @@
             <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
                 <input type="password" class="form-control" name="password" id="password"
-                       placeholder="Enter your Password"/>
+                       placeholder="Enter your Password" required/>
             </div>
         </div>
     </div>
