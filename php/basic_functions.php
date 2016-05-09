@@ -1,7 +1,7 @@
 <?php
 /**
- *  @autor Michael Abplanalp
- *  @version 2.0
+ * @autor Michael Abplanalp
+ * @version 2.0
  *
  *  Dieses Modul stellt grundlegende Funktionen zur Verfügung und ist damit
  *  Bestandteil des MVC-GIBS.
@@ -20,12 +20,13 @@
  * @param     $params       Assoziativer Array mit Werten, welche im Template eingefügt werden.
  *                          key: Name der Variable, value: Wert
  */
-function runTemplate($template) {
-	ob_start();
-	include($template);
-	$inhalt=ob_get_contents();
-	ob_end_clean();
-	return $inhalt;
+function runTemplate($template)
+{
+    ob_start();
+    include($template);
+    $inhalt = ob_get_contents();
+    ob_end_clean();
+    return $inhalt;
 }
 
 /*
@@ -35,7 +36,8 @@ function runTemplate($template) {
  * @param       $value      Wert des Wertes
  *
  */
-function setValue($key, $value) {
+function setValue($key, $value)
+{
     global $params;
     $params[$key] = $value;
 }
@@ -46,10 +48,11 @@ function setValue($key, $value) {
  * @param       $list      Assoziativer Array mit den zu speichernden Werten
  *
  */
-function setValues($list) {
+function setValues($list)
+{
     global $params;
-    if ( count($list )) {
-        foreach ($list as $k => $v ) {
+    if (count($list)) {
+        foreach ($list as $k => $v) {
             $params[$k] = $v;
         }
     }
@@ -58,9 +61,10 @@ function setValues($list) {
 /*
  * Liefert die über den Parameter "id" definierte Funktion zurück
 */
-function getId() {
-	if (isset($_REQUEST['id'])) return $_REQUEST['id'];
-	else return "";
+function getId()
+{
+    if (isset($_REQUEST['id'])) return $_REQUEST['id'];
+    else return "";
 }
 
 /*
@@ -69,10 +73,11 @@ function getId() {
  * @param       $key      Index des gewünschten Wetes
  *
  */
-function getValue($key) {
+function getValue($key)
+{
     global $params;
-	if (isset($params[$key])) return $params[$key];
-	else return "";
+    if (isset($params[$key])) return $params[$key];
+    else return "";
 }
 
 /*
@@ -81,10 +86,11 @@ function getValue($key) {
  * @param       $field      Index des gewünschten Wetes
  *
  */
-function getHtmlValue($key) {
+function getHtmlValue($key)
+{
     global $params;
-	if (isset($params[$key])) return htmlentities($params[$key]);
-	else return "";
+    if (isset($params[$key])) return htmlentities($params[$key]);
+    else return "";
 }
 
 /*
@@ -92,28 +98,31 @@ function getHtmlValue($key) {
  * @param   $mlist      Array mit den Menueinträgen. key: ID (Funktion), value: Menuoption
  * @param   $title      Menutitel
  */
-function getMenu($mlist, $title="") {
-	$loginMenu = isLoginMenu();
+function getMenu($mlist, $title = "")
+{
+    $loginMenu = isLoginMenu();
+    $printmenu = "";
     if (count($mlist)) {
         $active_link = getId();
-        if (empty($active_link)) $active_link=key($mlist);
-        $printmenu = "<table border='0' class='table_menu'>\n";
-        if (!empty($title)) $printmenu .= "<tr><th align='left'>$title</th></tr>\n";
-		if ($loginMenu) {
-			foreach ($mlist as $index=>$value) {
-				if ($index == $active_link) $active = "id='active'";
-				else $active = "";
-				$printmenu .= "<tr><td nowrap><a class='link_menu' $active href='".$_SERVER['PHP_SELF']."?id=$index'>$value</a></td></tr>\n";
-			}
-		} else {
-			$menuEntry = getValue('cfg_menu_level_member');
-			foreach ($mlist as $index=>$value) {
-				if ($index == $active_link) $active = "id='active'";
-				else $active = "";
-				$printmenu .= "<tr><td nowrap><a class='link_menu' $active href='".$_SERVER['PHP_SELF']."?id=$index'>$value</a></td></tr>\n";
-			}
+        if (empty($active_link)) $active_link = key($mlist);
+        $printmenu = '<nav class="navbar navbar-default"><div class="container-fluid"><div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>';
+        if (!empty($title)) $printmenu .= '<a class="navbar-brand" href="#">' . $title . '</a>';
+        $printmenu .= '</div><div class="collapse navbar-collapse" id="navbar"><ul class="nav navbar-nav">';
+        if ($loginMenu) {
+            foreach ($mlist as $index => $value) {
+                if ($index == $active_link) $active = "id='active'";
+                else $active = "";
+                $printmenu .= '<li class="nav-item ' . $active . '"><a class="nav-link" href="' . $_SERVER['PHP_SELF'] . '?id=' . $index . '">' . $value . '</a></li>';
+            }
+        } else {
+            $menuEntry = getValue('cfg_menu_level_member');
+            foreach ($mlist as $index => $value) {
+                if ($index == $active_link) $active = "id='active'";
+                else $active = "";
+                $printmenu .= $printmenu .= '<li class="nav-item ' . $active . '"><a class="nav-link" href="' . $_SERVER['PHP_SELF'] . '?id=' . $index . '">' . $value . '</a></li>';
+            }
         }
-        $printmenu .= "</table>\n";
+        $printmenu .= "</div></div></ul></nav>";
     }
     return $printmenu;
 }
@@ -121,9 +130,10 @@ function getMenu($mlist, $title="") {
 /*
  * Prüft, ob es sich um das Login-Menu handelt (ansonsten = Member-Menu)
  */
-function isLoginMenu() {
-  if (getValue('menu_eintraege') == "cfg_menu_login") return true;
-  else return false;
+function isLoginMenu()
+{
+    if (getValue('menu_eintraege') == "cfg_menu_login") return true;
+    else return false;
 }
 
 /*
@@ -133,7 +143,8 @@ function isLoginMenu() {
  * @param       $value    Wert, der in die Variable geschrieben wird
  *
  */
-function setSessionValue($key, $value) {
+function setSessionValue($key, $value)
+{
     $_SESSION[$key] = $value;
 }
 
@@ -143,9 +154,10 @@ function setSessionValue($key, $value) {
  * @param       $key      Index des gewünschten Wertes
  *
  */
-function getSessionValue($key) {
-	if (isset($_SESSION[$key])) return $_SESSION[$key];
-	else return "";
+function getSessionValue($key)
+{
+    if (isset($_SESSION[$key])) return $_SESSION[$key];
+    else return "";
 }
 
 /**
@@ -153,8 +165,9 @@ function getSessionValue($key) {
  *
  * @param   $attribut       Attribut, das in eine Tabelle eingefügt werden soll
  */
-function escapeSpecialChars($attribut) {
-	return mysqli_real_escape_string(getValue('cfg_db'), $attribut);
+function escapeSpecialChars($attribut)
+{
+    return mysqli_real_escape_string(getValue('cfg_db'), $attribut);
 }
 
 /**
@@ -162,12 +175,13 @@ function escapeSpecialChars($attribut) {
  *
  * @param   $sql       Select-Befehl, welcher ausgeführt werden soll
  */
-function sqlSelect($sql) {
-	$data = "";
- 	$result = mysqli_query(getValue('cfg_db'), $sql);
- 	if (!$result ) die("Fehler: ".mysqli_error());
- 	while ($row=mysqli_fetch_assoc($result)) $data[]=$row;
-	return $data;
+function sqlSelect($sql)
+{
+    $data = "";
+    $result = mysqli_query(getValue('cfg_db'), $sql);
+    if (!$result) die("Fehler: " . mysqli_error());
+    while ($row = mysqli_fetch_assoc($result)) $data[] = $row;
+    return $data;
 }
 
 /**
@@ -175,9 +189,10 @@ function sqlSelect($sql) {
  *
  * @param   $sql    SQL-Befehl, welcher ausgeführt werden soll
  */
- function sqlQuery($sql) {
-	$result = mysqli_query(getValue('cfg_db'), $sql);
- 	if (!$result) die(mysqli_error(getValue('cfg_db'))."<pre>".$sql."</pre>");
+function sqlQuery($sql)
+{
+    $result = mysqli_query(getValue('cfg_db'), $sql);
+    if (!$result) die(mysqli_error(getValue('cfg_db')) . "<pre>" . $sql . "</pre>");
 }
 
 /**
@@ -185,9 +200,10 @@ function sqlSelect($sql) {
  *
  * @param   $id     ID der Funktion, welche aufgerufen werden soll
  */
-function redirect($id="") {
-    if (!empty($id)) $id="?id=$id";
-    header("Location: ".$_SERVER['PHP_SELF'].$id);
+function redirect($id = "")
+{
+    if (!empty($id)) $id = "?id=$id";
+    header("Location: " . $_SERVER['PHP_SELF'] . $id);
     exit();
 }
 
@@ -197,9 +213,10 @@ function redirect($id="") {
  * @param   $value      Eingabewert
  * @param   $maxlength  Minimale Länge der Eingabe
  */
-function CheckEmpty($value, $minlength=Null) {
+function CheckEmpty($value, $minlength = Null)
+{
     if (empty($value)) return false;
-    if ( $minlength != Null && strlen($value) < $minlength ) return false;
+    if ($minlength != Null && strlen($value) < $minlength) return false;
     else return true;
 }
 
@@ -209,10 +226,11 @@ function CheckEmpty($value, $minlength=Null) {
  * @param   $value      Eingabewert
  * @param   $empty      Die Email-Adresse kann leer sein ('Y') oder nicht ('N')
  */
-function CheckEmailFormat($value, $empty='N') {
+function CheckEmailFormat($value, $empty = 'N')
+{
     $pattern_email = '/^[^@\s<&>]+@([-a-z0-9]+\.)+[a-z]{2,}$/i';
-    if ($empty=='Y' && empty($value)) return true;
-    if ( preg_match($pattern_email, $value) ) return true;
+    if ($empty == 'Y' && empty($value)) return true;
+    if (preg_match($pattern_email, $value)) return true;
     else return false;
 }
 
@@ -224,9 +242,10 @@ function CheckEmailFormat($value, $empty='N') {
  * @param   $value      Eingabewert
  * @param   $empty      Der Name kann leer sein ('Y') oder nicht ('N')
  */
-function CheckName($value, $empty='N') {
+function CheckName($value, $empty = 'N')
+{
     $pattern_name = '/^[a-zA-ZäöüÄÖÜ \-]{2,}$/';
-    if ($empty=='Y' && empty($value)) return true;
+    if ($empty == 'Y' && empty($value)) return true;
     if (preg_match($pattern_name, $value)) return true;
     else return false;
 }
@@ -241,8 +260,9 @@ function CheckName($value, $empty='N') {
  *
  * @param   $value      Eingabewert
  */
-function CheckPasswordFormat($value) {
-	$pattern_pw = '/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,20}$/';
+function CheckPasswordFormat($value)
+{
+    $pattern_pw = '/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,20}$/';
     if (preg_match($pattern_pw, $value)) return true;
     else return false;
 }
@@ -253,9 +273,10 @@ function CheckPasswordFormat($value) {
  * @param   $value1     Passwort
  * @param   $value2     Passwortwiederholung
  */
-function CheckPasswordCompare($value1, $value2) {
+function CheckPasswordCompare($value1, $value2)
+{
     if ($value2 == $value1) return true;
-	else return false;
+    else return false;
 }
 
 /*
@@ -264,23 +285,26 @@ function CheckPasswordCompare($value1, $value2) {
  * @param       $passwort      Das Passwort, das verschlüsselt wird
  *
 */
-function passwordHash($passwort) {
-	return password_hash($passwort, PASSWORD_BCRYPT);
+function passwordHash($passwort)
+{
+    return password_hash($passwort, PASSWORD_BCRYPT);
 }
 
 /*
  * Liefert den Wert des gewünschten Parameters zurück, der via POST bzw. GET übergeben worden ist
 */
-function getRequestParam($param) {
-	if (isset($_REQUEST[$param])) return $_REQUEST[$param];
-	else return "";
+function getRequestParam($param)
+{
+    if (isset($_REQUEST[$param])) return $_REQUEST[$param];
+    else return "";
 }
 
 /*
  * Bereitet einen Text für die Ausbage in HTML vor
 */
-function htmlTextAufbereiten($value) {
-	return nl2br(htmlentities($value));
+function htmlTextAufbereiten($value)
+{
+    return nl2br(htmlentities($value));
 }
 
 /**
@@ -288,7 +312,8 @@ function htmlTextAufbereiten($value) {
  *
  * @param   $value      Übergebender Wert
  */
-function isNumber($value) {
+function isNumber($value)
+{
     if (!is_numeric($value)) return false;
     return true;
 }
@@ -298,7 +323,8 @@ function isNumber($value) {
  *
  * @param   $value      Übergebender Wert
  */
-function isCleanNumber($value) {
+function isCleanNumber($value)
+{
     if (!is_numeric($value)) return false;
     $pattern_number = '/^[0-9]*$/';
     if (preg_match($pattern_number, $value)) return true;
@@ -312,9 +338,11 @@ function isCleanNumber($value) {
  * @param   $value         Eingabewert
  * @param   $minlength     Minimale Länge der Zahl
  */
-function CheckCleanNumberEmpty($value, $minlength=0) {
+function CheckCleanNumberEmpty($value, $minlength = 0)
+{
     if (empty($value)) return true;
     if (!isCleanNumber($value) || strlen($value) < $minlength) return false;
     else return true;
 }
+
 ?>

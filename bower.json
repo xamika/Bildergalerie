@@ -1,0 +1,23 @@
+{
+  "name": "Bildergalerie",
+  "homepage": "https://github.com/xamika/Bildergalerie",
+  "authors": [
+    "Egli Tobias",
+    "GHR-DEV-NEX-R1-BE5 <Tobias.Egli@swisscom.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.6",
+    "font-awesome": "fontawesome#^4.6.2"
+  }
+}
