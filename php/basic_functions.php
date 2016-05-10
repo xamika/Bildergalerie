@@ -30,11 +30,10 @@ function runTemplate($template)
 }
 
 function addMessage($type, $content) {
-    // TODO mehrere messages gleichzeitig
-    if (isset($_SESSION['message'])) {
-        $_SESSION['message'] = ["type" => $type, "content" => $content];
+    if (!isset($_SESSION['message'])) {
+        $_SESSION['message'] = [["type" => $type, "content" => $content]];
     } else {
-        $_SESSION['message'] = ["type" => $type, "content" => $content];
+        array_push($_SESSION['message'], ["type" => $type, "content" => $content]);
     }
 
 }

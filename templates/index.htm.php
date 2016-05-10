@@ -25,19 +25,21 @@
         </div>
         <div class="col-sm-8 text-left">
             <!-- Content -->
-            <!-- TODO mehrere messages gleichzeitig -->
-            <?php if (isset($_SESSION['message'])) { ?>
-                <div class="alert alert-<?php echo $_SESSION['message']['type'] ?> alert-dismissible fade in" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <?php echo $_SESSION['message']['content']; ?>
-                </div>
-                <?php
+            <?php if (isset($_SESSION['message'])) {
+                foreach ($_SESSION['message'] as $message) {
+                    ?>
+                    <div class="alert alert-<?php echo $message['type'] ?> alert-dismissible fade in"
+                         role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <?php echo $message['content']; ?>
+                    </div>
+                    <?php
+                }
                 $_SESSION['message'] = null;
             }
             ?>
-
             <?php echo getValue('inhalt'); ?>
         </div>
         <div class="col-sm-2 sidenav">

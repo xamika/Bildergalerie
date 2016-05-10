@@ -10,7 +10,12 @@
  */
 
 function db_insert_benutzer($params, $passwort) {
-    $sql = "insert into benutzer (vorname, nachname, email, passwort)
-            values ('".escapeSpecialChars($params['vorname'])."','".escapeSpecialChars($params['nachname'])."','".escapeSpecialChars($params['email'])."','".$passwort."')";
+    $sql = "insert into tbl_users (vorname, nachname, email, passwort)
+            values ('".escapeSpecialChars($params['firstname'])."','".escapeSpecialChars($params['name'])."','".escapeSpecialChars($params['email'])."','".$passwort."')";
     sqlQuery($sql);
+}
+
+function db_select_user($email, $password) {
+    $sql = "select * from tbl_users where email ='" . escapeSpecialChars($email) . "' and passwort = '" . $password . "'";
+    return sqlQuery($sql);
 }
