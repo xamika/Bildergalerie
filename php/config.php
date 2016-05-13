@@ -17,7 +17,7 @@ setValue('cfg_func_member', array("fotoalben","logout"));
 // Inhalt des Login-Menus
 setValue('cfg_menu_login', array("login"=>"Login","registration"=>"Registration"));
 // Inhalt des Menus im Memberbereich
-setValue('cfg_menu_member', array("fotoalben"=>"Fotoalben"));
+setValue('cfg_menu_member', array("fotoalben"=>"Fotoalben", "logout"=>"Logout"));
 
 // Datenbankverbindung herstellen
 $db = mysqli_connect("127.0.0.1", "root", "", "bilderdb");	// Zu Datenbankserver verbinden

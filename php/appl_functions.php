@@ -25,6 +25,6 @@ function getCssClass( $name ) {
 function fotoalben() {
     // Template abfüllen und Resultat zurückgeben
     setValue('phpmodule', $_SERVER['PHP_SELF']."?id=".__FUNCTION__);
-    return runTemplate( "../templates/fotoalben.htm.php" );
+    return runTemplate( "templates/fotoalben.htm.php" );
 }
 ?>

@@ -124,11 +124,10 @@ function getMenu($mlist, $title = "")
                 $printmenu .= '<li class="nav-item ' . $active . '"><a class="nav-link" href="' . $_SERVER['PHP_SELF'] . '?id=' . $index . '">' . $value . '</a></li>';
             }
         } else {
-            $menuEntry = getValue('cfg_menu_level_member');
             foreach ($mlist as $index => $value) {
                 if ($index == $active_link) $active = "id='active'";
                 else $active = "";
-                $printmenu .= $printmenu .= '<li class="nav-item ' . $active . '"><a class="nav-link" href="' . $_SERVER['PHP_SELF'] . '?id=' . $index . '">' . $value . '</a></li>';
+                $printmenu .= '<li class="nav-item ' . $active . '"><a class="nav-link" href="' . $_SERVER['PHP_SELF'] . '?id=' . $index . '">' . $value . '</a></li>';
             }
         }
         $printmenu .= "</div></div></ul></nav>";
@@ -297,6 +296,12 @@ function CheckPasswordCompare($value1, $value2)
 function passwordHash($passwort)
 {
     return password_hash($passwort, PASSWORD_BCRYPT);
+}
+
+
+function passwordVerify($passowrt, $hash)
+{
+    return password_verify($passowrt, $hash);
 }
 
 /*

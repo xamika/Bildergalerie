@@ -15,7 +15,7 @@ function db_insert_benutzer($params, $passwort) {
     sqlQuery($sql);
 }
 
-function db_select_user($email, $password) {
-    $sql = "select * from tbl_users where email ='" . escapeSpecialChars($email) . "' and passwort = '" . $password . "'";
-    return sqlQuery($sql);
+function db_select_user($email) {
+    $sql = "select * from tbl_users where email ='" . escapeSpecialChars($email) . "'";
+    return sqlSelect($sql);
 }

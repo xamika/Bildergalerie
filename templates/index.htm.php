@@ -2,16 +2,16 @@
 <html lang="de">
 <head>
     <meta charset="utf-8"/>
-    <link rel="stylesheet" type="text/css" href="../css/styles.css"/>
+    <link rel="stylesheet" type="text/css" href="css/styles.css"/>
     <!-- Latest compiled and minified CSS Bootstrap -->
-    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" type="text/css">
     <!-- Website Font style font-awesome -->
-    <link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="../bower_components/jquery/dist/jquery.min.js" type="text/javascript"></script>
+    <script src="bower_components/jquery/dist/jquery.min.js" type="text/javascript"></script>
     <!-- Latest compiled and minified JavaScript Bootstrap -->
-    <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
-    <script src="../js/javascript.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="js/javascript.js"></script>
     <title>Bilderdatenbank</title>
 </head>
 <body>

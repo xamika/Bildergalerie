@@ -37,11 +37,16 @@ function registration()
         }
         if ($error) {
             setValue('phpmodule', $_SERVER['PHP_SELF'] . "?id=" . __FUNCTION__);
-            return runTemplate("../templates/registration.htm.php");
+            return runTemplate("templates/registration.htm.php");
         } else {
             db_insert_benutzer($_POST, passwordHash($_POST['password']));
-            addMessage('success', 'Valid informations');
+            addMessage('success', 'Sie haben sich erfolgreich registriert');
+            setValue('phpmodule', $_SERVER['PHP_SELF'] . "?id=login");
+            return runTemplate("templates/login.htm.php");
         }
+    } else {
+        setValue('phpmodule', $_SERVER['PHP_SELF'] . "?id=" . __FUNCTION__);
+        return runTemplate("templates/registration.htm.php");
     }
 }
 
@@ -51,21 +56,28 @@ function registration()
 function login()
 {
     if (isset($_POST['login'])) {
-        $login = true;
+        $db_result = db_select_user($_POST['email']);
+        if (isset($db_result[0]) && passwordVerify($_POST['password'], $db_result[0]['passwort'])) {
+            setSessionValue("benutzerId", $db_result[0]['userId']);
+            header("Location: index.php?id=fotoalben");
+            exit();
+        } else {
+            setValue('phpmodule', $_SERVER['PHP_SELF'] . "?id=" . __FUNCTION__);
+            addMessage('success', 'Du hast dich erfolgreich angemeldet');
+            return runTemplate("templates/login.htm.php");
+        }
     } else {
-        $login = false;
+        setValue('phpmodule', $_SERVER['PHP_SELF'] . "?id=" . __FUNCTION__);
+        return runTemplate("templates/login.htm.php");
     }
+}
 
-    // Das Forum wird ohne Angabe der Funktion aufgerufen bzw. es wurde auf die Schaltfläche "abbrechen" geklickt
-    setValue('phpmodule', $_SERVER['PHP_SELF'] . "?id=" . __FUNCTION__);
-
-    addMessage("info", "Test Information");
-    if ($login) {
-        addMessage("success", "Sie haben sich erfolgreich angemeldet.");
-    } else {
-        addMessage("danger", "Username oder Passwort sind nicht korrekt.");
-    }
-    return runTemplate("../templates/login.htm.php");
+function logout()
+{
+    setSessionValue("benutzerId", null);
+    addMessage('success', 'Du hast dich erfolgreich abgemeldet');
+    header("Location: index.php");
+    exit();
 }
 
 /*

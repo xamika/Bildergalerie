@@ -12,11 +12,11 @@
  *  Im Beispiel wird die Funktion "show" ausgeführt.
  */
 session_start();
-include("basic_functions.php");
-include("config.php");
-include("db_functions.php");
-include("auth_functions.php");
-include("appl_functions.php");
+include("php/basic_functions.php");
+include("php/config.php");
+include("php/db_functions.php");
+include("php/auth_functions.php");
+include("php/appl_functions.php");
 
 // Anmeldung oder andere Sicherheitschecks, falls erwünscht!
 // anmeldung(), check_security(), etc.
@@ -26,7 +26,7 @@ if (angemeldet()) {
 	$flist = getValue('cfg_func_member');
 	if (!count($flist)) die("cfg_func_member nicht definiert!");
 	// Das Menu aufs Hauptmenu setzen (Memberbereich)
-	setValue('menu_titel', 'Hauptmenü');
+	setValue('menu_titel', 'Hauptmenu');
 	setValue('menu_eintraege', 'cfg_menu_member');
 } else {
 	// Falls cfg_func_login nicht existiert, abbrechen!
@@ -48,5 +48,5 @@ setValue('func', $func);
 // Funktion aufrufen und Rückgabewert in "inhalt" speichern
 setValue('inhalt', $func());
 // Haupttemplate aufrufen, Ausgabe an Client (Browser) senden
-echo runTemplate("../templates/index.htm.php");
+echo runTemplate("templates/index.htm.php");
 ?>
