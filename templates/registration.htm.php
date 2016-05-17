@@ -4,7 +4,7 @@
         <label for="name" class="control-label">Vorname</label>
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
-            <input type="text" class="form-control" name="firstname" id="firstname" placeholder="Vorname"/>
+            <input type="text" class="form-control" name="firstname" id="firstname" placeholder="Vorname" value="<?php if (isset($_POST['firstname'])) echo $_POST['firstname']; ?>"/>
         </div>
     </div>
 
@@ -12,7 +12,7 @@
         <label for="name" class="control-label">Name</label>
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
-            <input type="text" class="form-control" name="name" id="name" placeholder="Name"/>
+            <input type="text" class="form-control" name="name" id="name" placeholder="Name" value="<?php if (isset($_POST['name'])) echo $_POST['name']; ?>"/>
         </div>
     </div>
 
@@ -20,7 +20,7 @@
         <label for="email" class="control-label">Email</label>
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
-            <input type="email" class="form-control" name="email" id="email" placeholder="Email" required/>
+            <input type="email" class="form-control" name="email" id="email" placeholder="Email" value="<?php if (isset($_POST['email'])) echo $_POST['email']; ?>" required/>
         </div>
     </div>
 

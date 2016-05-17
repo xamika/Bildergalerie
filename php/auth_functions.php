@@ -30,24 +30,29 @@ function registration()
             addMessage('danger', 'Passwords should be same<br>');
         }
 
+        if (!CheckPasswordFormat($_POST['password'])) {
+            $error = true;
+            addMessage('danger', 'Passwort entspricht nicht den richtlinien');
+        }
+
         /* Email Validation */
         if (!CheckEmailFormat($_POST["email"])) {
             $error = true;
-            addMessage('danger', "Invalid UserEmail ");
+            addMessage('danger', "Invalid Email ");
+        } elseif (isset(db_select_user($_POST['email'])[0])) {
+            $error = true;
+            addMessage('danger', "Email adresse ist bereits vorhanden");
         }
-        if ($error) {
-            setValue('phpmodule', $_SERVER['PHP_SELF'] . "?id=" . __FUNCTION__);
-            return runTemplate("templates/registration.htm.php");
-        } else {
+        if (!$error) {
             db_insert_benutzer($_POST, passwordHash($_POST['password']));
             addMessage('success', 'Sie haben sich erfolgreich registriert');
-            setValue('phpmodule', $_SERVER['PHP_SELF'] . "?id=login");
-            return runTemplate("templates/login.htm.php");
+            redirect('login');
         }
-    } else {
-        setValue('phpmodule', $_SERVER['PHP_SELF'] . "?id=" . __FUNCTION__);
-        return runTemplate("templates/registration.htm.php");
     }
+
+    setValue('phpmodule', $_SERVER['PHP_SELF'] . "?id=" . __FUNCTION__);
+    return runTemplate("templates/registration.htm.php");
+
 }
 
 /*
@@ -59,25 +64,21 @@ function login()
         $db_result = db_select_user($_POST['email']);
         if (isset($db_result[0]) && passwordVerify($_POST['password'], $db_result[0]['passwort'])) {
             setSessionValue("benutzerId", $db_result[0]['userId']);
-            header("Location: index.php?id=fotoalben");
-            exit();
-        } else {
-            setValue('phpmodule', $_SERVER['PHP_SELF'] . "?id=" . __FUNCTION__);
             addMessage('success', 'Du hast dich erfolgreich angemeldet');
-            return runTemplate("templates/login.htm.php");
+            redirect('fotoalben');
+        } else {
+            addMessage('danger', 'Username oder Passwort sind falsch');
         }
-    } else {
-        setValue('phpmodule', $_SERVER['PHP_SELF'] . "?id=" . __FUNCTION__);
-        return runTemplate("templates/login.htm.php");
     }
+    setValue('phpmodule', $_SERVER['PHP_SELF'] . "?id=" . __FUNCTION__);
+    return runTemplate("templates/login.htm.php");
 }
 
 function logout()
 {
     setSessionValue("benutzerId", null);
     addMessage('success', 'Du hast dich erfolgreich abgemeldet');
-    header("Location: index.php");
-    exit();
+    redirect('login');
 }
 
 /*
@@ -89,4 +90,4 @@ function angemeldet()
     else return false;
 }
 
-?>
+
