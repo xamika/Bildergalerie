@@ -27,4 +27,9 @@ function fotoalben() {
     setValue('phpmodule', $_SERVER['PHP_SELF']."?id=".__FUNCTION__);
     return runTemplate( "templates/fotoalben.htm.php" );
 }
+
+function create_fotoalbum() {
+    setValue('phpmodule', $_SERVER['PHP_SELF']."?id=".__FUNCTION__);
+    return runTemplate( "templates/create_fotoalbum.htm.php" );
+}
 ?>
