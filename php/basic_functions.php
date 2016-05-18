@@ -200,7 +200,11 @@ function sqlSelect($sql)
 function sqlQuery($sql)
 {
     $result = mysqli_query(getValue('cfg_db'), $sql);
-    if (!$result) die(mysqli_error(getValue('cfg_db')) . "<pre>" . $sql . "</pre>");
+    if (!$result) {
+        die(mysqli_error(getValue('cfg_db')) . "<pre>" . $sql . "</pre>");
+    } else {
+        return$result;
+    }
 }
 
 /**

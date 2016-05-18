@@ -13,7 +13,7 @@ setValue('cfg_css_class_error',"err");
 // Akzeptierte Funktionen Login
 setValue('cfg_func_login', array("login","registration"));
 // Akzeptierte Funktionen Memberbereich
-setValue('cfg_func_member', array("fotoalben","logout", "create_fotoalbum"));
+setValue('cfg_func_member', array("fotoalben","logout", "create_fotoalbum", "add_images"));
 // Inhalt des Login-Menus
 setValue('cfg_menu_login', array("login"=>"Login","registration"=>"Registration"));
 // Inhalt des Menus im Memberbereich
