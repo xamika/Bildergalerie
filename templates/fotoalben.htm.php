@@ -1,5 +1,11 @@
 <h2>Fotoalben</h2>
 <?php
-foreach (getValue('fotoalbum') as $value) {
-    echo $value['name'] . " " . $value['id'] . "<br>";
+
+if (getValue('fotoalbum')) {
+    foreach (getValue('fotoalbum') as $fotoalbum) {
+        echo "<a href='index.php?id=fotoalbum&nr=" . $fotoalbum['id'] . "'>" . $fotoalbum['name'] . "</a><br>";
+    }
+} else {
+    echo "<h4>Sie haben noch kein Fotoalbum erstellt.</h4>";
 }
+

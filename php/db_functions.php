@@ -46,3 +46,9 @@ function db_select_fotogalerien($user_id) {
             and tbl_users_fotogalerien.fk_users = " . $user_id;
     return sqlSelect($sql);
 }
+
+function db_select_fotogalerie_images($id, $user_id) {
+    $sql = "SELECT * from tbl_users_fotogalerien, tbl_fotogalerien, tbl_fotos where tbl_users_fotogalerien.fk_fotogalerie = tbl_fotogalerien.id
+            and tbl_users_fotogalerien.fk_users = " . $user_id ." AND tbl_fotos.fk_fotogalerie = " . $id ." group by tbl_fotos.id";
+    return sqlSelect($sql);
+}

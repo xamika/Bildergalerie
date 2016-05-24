@@ -26,7 +26,14 @@ function fotoalben() {
     // Template abfüllen und Resultat zurückgeben
     setValue('fotoalbum', db_select_fotogalerien(getSessionValue('benutzerId')));
     setValue('phpmodule', $_SERVER['PHP_SELF']."?id=".__FUNCTION__);
-    return runTemplate( "templates/fotoalben.htm.php" );
+    return runTemplate( "../templates/fotoalben.htm.php" );
+}
+
+function fotoalbum() {
+    $gallery_id = $_GET['nr'];
+    setValue('images', db_select_fotogalerie_images($gallery_id, getSessionValue("benutzerId")));
+    setValue('phpmodule', $_SERVER['PHP_SELF']."?id=".__FUNCTION__);
+    return runTemplate( "../templates/fotoalbum.htm.php" );
 }
 
 function create_fotoalbum() {
@@ -41,11 +48,11 @@ function create_fotoalbum() {
         }
     }
     setValue('phpmodule', $_SERVER['PHP_SELF']."?id=".__FUNCTION__);
-    return runTemplate( "templates/create_fotoalbum.htm.php" );
+    return runTemplate( "../templates/create_fotoalbum.htm.php" );
 }
 
 function add_images() {
     setValue('phpmodule', $_SERVER['PHP_SELF']."?id=".__FUNCTION__);
-    return runTemplate( "templates/add_images.htm.php" );
+    return runTemplate( "../templates/add_images.htm.php" );
 }
 ?>

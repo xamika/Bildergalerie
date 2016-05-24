@@ -12,11 +12,11 @@
  *  Im Beispiel wird die Funktion "show" ausgeführt.
  */
 session_start();
-include("php/basic_functions.php");
-include("php/config.php");
-include("php/db_functions.php");
-include("php/auth_functions.php");
-include("php/appl_functions.php");
+include("../php/basic_functions.php");
+include("../php/config.php");
+include("../php/db_functions.php");
+include("../php/auth_functions.php");
+include("../php/appl_functions.php");
 
 // Anmeldung oder andere Sicherheitschecks, falls erwünscht!
 // anmeldung(), check_security(), etc.
@@ -48,5 +48,5 @@ setValue('func', $func);
 // Funktion aufrufen und Rückgabewert in "inhalt" speichern
 setValue('inhalt', $func());
 // Haupttemplate aufrufen, Ausgabe an Client (Browser) senden
-echo runTemplate("templates/index.htm.php");
+echo runTemplate("../templates/index.htm.php");
 ?>

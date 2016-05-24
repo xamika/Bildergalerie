@@ -51,7 +51,7 @@ function registration()
     }
 
     setValue('phpmodule', $_SERVER['PHP_SELF'] . "?id=" . __FUNCTION__);
-    return runTemplate("templates/registration.htm.php");
+    return runTemplate("../templates/registration.htm.php");
 
 }
 
@@ -71,7 +71,7 @@ function login()
         }
     }
     setValue('phpmodule', $_SERVER['PHP_SELF'] . "?id=" . __FUNCTION__);
-    return runTemplate("templates/login.htm.php");
+    return runTemplate("../templates/login.htm.php");
 }
 
 function logout()
