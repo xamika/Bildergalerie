@@ -52,3 +52,7 @@ function db_select_fotogalerie_images($id, $user_id) {
             and tbl_users_fotogalerien.fk_users = " . $user_id ." AND tbl_fotos.fk_fotogalerie = " . $id ." group by tbl_fotos.id";
     return sqlSelect($sql);
 }
+
+function db_delete_fotogalerie($id, $user_id) {
+
+}

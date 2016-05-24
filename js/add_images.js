@@ -4,13 +4,15 @@
 
 $(document).on("ready", function() {
     $("#images").fileinput({
+        language: "de",
         uploadUrl: "../php/upload.php", // server upload action
         uploadAsync: true,
-        maxFileCount: 10,
+        maxFileCount: 100,
+        allowedFileExtensions: ['jpg', 'gif', 'png'],
         uploadExtraData: function() {
             return {
                 galery_id: $("#galery_id").val(),
             };
-        },
+        }
     });
 });

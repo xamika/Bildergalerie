@@ -52,6 +52,7 @@ function create_fotoalbum() {
 }
 
 function add_images() {
+    setValue('galery_id', getSessionValue('galery_id'));
     setValue('phpmodule', $_SERVER['PHP_SELF']."?id=".__FUNCTION__);
     return runTemplate( "../templates/add_images.htm.php" );
 }
