@@ -30,7 +30,12 @@ function fotoalben() {
 }
 
 function fotoalbum() {
+    if (isset($_REQUEST['delete']) && isset($_REQUEST['img_id'])) {
+        db_delete_image($_REQUEST['img_id'], getSessionValue('benutzerId'));
+    }
     $gallery_id = $_GET['nr'];
+    setSessionValue('galery_id', $gallery_id);
+    setValue('galery_id', $gallery_id);
     setValue('images', db_select_fotogalerie_images($gallery_id, getSessionValue("benutzerId")));
     setValue('phpmodule', $_SERVER['PHP_SELF']."?id=".__FUNCTION__);
     return runTemplate( "../templates/fotoalbum.htm.php" );
@@ -56,4 +61,13 @@ function add_images() {
     setValue('phpmodule', $_SERVER['PHP_SELF']."?id=".__FUNCTION__);
     return runTemplate( "../templates/add_images.htm.php" );
 }
-?>
+
+function show_image() {
+    if (isset($_REQUEST['img_id']) && isset($_REQUEST['nr'])) {
+        setValue('image', db_select_image($_REQUEST['img_id'], getSessionValue('benutzerId')));
+        setValue('phpmodule', $_SERVER['PHP_SELF']."?id=".__FUNCTION__);
+        return runTemplate( "../templates/show_image.htm.php" );
+    } else {
+
+    }
+}

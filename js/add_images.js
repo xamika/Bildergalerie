@@ -8,7 +8,7 @@ $(document).on("ready", function() {
         uploadUrl: "../php/upload.php", // server upload action
         uploadAsync: true,
         maxFileCount: 100,
-        allowedFileExtensions: ['jpg', 'gif', 'png'],
+        allowedFileExtensions: ['jpg'],
         uploadExtraData: function() {
             return {
                 galery_id: $("#galery_id").val(),
