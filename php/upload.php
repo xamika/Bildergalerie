@@ -34,7 +34,10 @@ $filenames = $images['name'];
 $target = null;
 for ($i = 0; $i < count($filenames); $i++) {
     $ext = explode('.', basename($filenames[$i]));
-    $target = "../images/galery/". urldecode(DIRECTORY_SEPARATOR . md5(uniqid()) . "." . array_pop($ext));
+    $target = "../images/galery/". DIRECTORY_SEPARATOR . uniqid(rand(10, 50), true) . "." . array_pop($ext);
+    while (file_exists($target)) {
+        $target = "../images/galery/". DIRECTORY_SEPARATOR . uniqid(rand(10, 50), true) . "." . array_pop($ext);
+    }
 
     if (move_uploaded_file($images['tmp_name'][$i], $target)) {
         $success = true;

@@ -31,7 +31,8 @@ function registration()
 
 }
 
-function check_user_data() {
+function check_user_data()
+{
     $error = false;
     foreach ($_POST as $key => $value) {
         if (empty($_POST[$key])) {
@@ -84,13 +85,18 @@ function logout()
     redirect('login');
 }
 
-function edit_user() {
+function edit_user()
+{
     if (isset($_POST['update_user_data'])) {
         $error = check_user_data();
         if (!$error) {
             db_update_benutzer($_POST, passwordHash($_POST['password']), getSessionValue('benutzerId'));
             addMessage('success', 'Daten wurden erfolgreich aktualisiert');
         }
+    } elseif (isset($_POST['delete'])) {
+        db_delete_user(getSessionValue('benutzerId'));
+        addMessage('success', 'Ihr Konto wurde erfolgreich gelöst.');
+        redirect('logout');
     }
     setValue('user_data', db_select_user_by_id(getSessionValue('benutzerId'))[0]);
     setValue('phpmodule', $_SERVER['PHP_SELF'] . "?id=" . __FUNCTION__);
