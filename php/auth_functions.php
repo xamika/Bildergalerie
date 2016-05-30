@@ -19,7 +19,7 @@ function registration()
             if (isset(db_select_user($_POST['email'])[0])) {
                 addMessage('danger', "Email adresse ist bereits vorhanden");
             } else {
-                db_insert_benutzer($_POST, passwordHash($_POST['password']));
+                db_insert_user($_POST, passwordHash($_POST['password']));
                 addMessage('success', 'Sie haben sich erfolgreich registriert');
                 redirect('login');
             }
@@ -27,10 +27,67 @@ function registration()
     }
 
     setValue('phpmodule', $_SERVER['PHP_SELF'] . "?id=" . __FUNCTION__);
-    return runTemplate("../templates/registration.htm.php");
+    return runTemplate("../templates/user_registration.htm.php");
 
 }
 
+/*
+ * Beinhaltet die Anwendungslogik zum Login
+ */
+function login()
+{
+    if (isset($_POST['login'])) {
+        $db_result = db_select_user($_POST['email']);
+        if (isset($db_result[0]) && passwordVerify($_POST['password'], $db_result[0]['password'])) {
+            setSessionValue("user_id", $db_result[0]['id']);
+            addMessage('success', 'Du hast dich erfolgreich angemeldet');
+            redirect('fotoalben');
+        } else {
+            addMessage('danger', 'Username oder Passwort sind falsch');
+        }
+    }
+    setValue('phpmodule', $_SERVER['PHP_SELF'] . "?id=" . __FUNCTION__);
+    return runTemplate("../templates/user_login.htm.php");
+}
+
+function logout()
+{
+    setSessionValue("user_id", null);
+    addMessage('success', 'Du hast dich erfolgreich abgemeldet');
+    redirect('login');
+}
+
+function user_edit()
+{
+    if (isset($_POST['update_user_data'])) {
+        $error = check_user_data();
+        if (!$error) {
+            db_update_user($_POST, passwordHash($_POST['password']), getSessionValue('user_id'));
+            addMessage('success', 'Daten wurden erfolgreich aktualisiert');
+        }
+    } elseif (isset($_POST['delete'])) {
+        db_delete_user(getSessionValue('user_id'));
+        addMessage('success', 'Ihr Konto wurde erfolgreich gelöst.');
+        redirect('logout');
+    }
+    setValue('user_data', db_select_user_by_id(getSessionValue('user_id'))[0]);
+    setValue('phpmodule', $_SERVER['PHP_SELF'] . "?id=" . __FUNCTION__);
+    return runTemplate("../templates/user_edit.htm.php");
+}
+
+/*
+ * Prüft, ob ein Benutzer angemeldet ist
+ */
+function angemeldet()
+{
+    if (strlen(getSessionValue("user_id")) > 0) return true;
+    else return false;
+}
+
+
+/*
+* Prüft, ob ie Benutzerdaten valid sind
+*/
 function check_user_data()
 {
     $error = false;
@@ -59,57 +116,5 @@ function check_user_data()
     return $error;
 }
 
-/*
- * Beinhaltet die Anwendungslogik zum Login
- */
-function login()
-{
-    if (isset($_POST['login'])) {
-        $db_result = db_select_user($_POST['email']);
-        if (isset($db_result[0]) && passwordVerify($_POST['password'], $db_result[0]['passwort'])) {
-            setSessionValue("benutzerId", $db_result[0]['userId']);
-            addMessage('success', 'Du hast dich erfolgreich angemeldet');
-            redirect('fotoalben');
-        } else {
-            addMessage('danger', 'Username oder Passwort sind falsch');
-        }
-    }
-    setValue('phpmodule', $_SERVER['PHP_SELF'] . "?id=" . __FUNCTION__);
-    return runTemplate("../templates/login.htm.php");
-}
-
-function logout()
-{
-    setSessionValue("benutzerId", null);
-    addMessage('success', 'Du hast dich erfolgreich abgemeldet');
-    redirect('login');
-}
-
-function edit_user()
-{
-    if (isset($_POST['update_user_data'])) {
-        $error = check_user_data();
-        if (!$error) {
-            db_update_benutzer($_POST, passwordHash($_POST['password']), getSessionValue('benutzerId'));
-            addMessage('success', 'Daten wurden erfolgreich aktualisiert');
-        }
-    } elseif (isset($_POST['delete'])) {
-        db_delete_user(getSessionValue('benutzerId'));
-        addMessage('success', 'Ihr Konto wurde erfolgreich gelöst.');
-        redirect('logout');
-    }
-    setValue('user_data', db_select_user_by_id(getSessionValue('benutzerId'))[0]);
-    setValue('phpmodule', $_SERVER['PHP_SELF'] . "?id=" . __FUNCTION__);
-    return runTemplate("../templates/edit_user.htm.php");
-}
-
-/*
- * Prüft, ob ein Benutzer angemeldet ist
- */
-function angemeldet()
-{
-    if (strlen(getSessionValue("benutzerId")) > 0) return true;
-    else return false;
-}
 
 

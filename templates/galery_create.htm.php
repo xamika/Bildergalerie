@@ -2,7 +2,7 @@
 
 
 
-<form name="create_fotoalbum" class="form-horizontal" action="<?php echo getValue('phpmodule'); ?>" method="post">
+<form name="create_galery" class="form-horizontal" action="<?php echo getValue('phpmodule'); ?>" method="post">
 
     <div class="form-group">
         <label for="name" class="control-label">Name</label>

@@ -5,7 +5,7 @@
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
             <input type="text" class="form-control" name="firstname" id="firstname" placeholder="Vorname"
-                   value="<?php if (isset(getValue('user_data')['vorname'])) echo getValue('user_data')['vorname']; ?>"/>
+                   value="<?php if (isset(getValue('user_data')['firstname'])) echo getValue('user_data')['firstname']; ?>"/>
         </div>
     </div>
 
@@ -14,7 +14,7 @@
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
             <input type="text" class="form-control" name="name" id="name" placeholder="Name"
-                   value="<?php if (isset(getValue('user_data')['nachname'])) echo getValue('user_data')['nachname']; ?>"/>
+                   value="<?php if (isset(getValue('user_data')['lastname'])) echo getValue('user_data')['lastname']; ?>"/>
         </div>
     </div>
 

@@ -9,98 +9,105 @@
  *
  */
 
-function db_insert_benutzer($params, $passwort)
+function db_insert_user($params, $password)
 {
-    $sql = "insert into tbl_users (vorname, nachname, email, passwort)
-            values ('" . escapeSpecialChars($params['firstname']) . "','" . escapeSpecialChars($params['name']) . "','" . escapeSpecialChars($params['email']) . "','" . $passwort . "')";
+    $sql = "insert into user (firstname, lastname, email, password)
+            values ('" . escapeSpecialChars($params['firstname']) . "','" . escapeSpecialChars($params['name']) . "','" . escapeSpecialChars($params['email']) . "','" . $password . "')";
     sqlQuery($sql);
 }
 
-function db_update_benutzer($params, $passwort, $user_id)
+function db_update_user($params, $password, $user_id)
 {
-    $sql = "update tbl_users set vorname='" . escapeSpecialChars($params['firstname']) . "',
-        nachname='" . escapeSpecialChars($params['name']) . "',
-        email='" . escapeSpecialChars($params['email']) . "', passwort='" . $passwort . "'
-            where userId =" . $user_id;
+    $sql = "update user set firstname='" . escapeSpecialChars($params['firstname']) . "',
+        lastname='" . escapeSpecialChars($params['name']) . "',
+        email='" . escapeSpecialChars($params['email']) . "', password='" . $password . "'
+            where id =" . $user_id;
     sqlQuery($sql);
 }
 
 function db_delete_user($user_id)
 {
-    $galeries = db_select_fotogalerien($user_id);
+    $galeries = db_select_galery($user_id);
     if (isset($galeries[0])) {
         foreach ($galeries as $galery_value) {
-            db_delete_fotogalerie($galery_value['id'], $user_id);
+            db_delete_galery($galery_value['id'], $user_id);
         }
     }
-    sqlQuery("DELETE FROM tbl_users WHERE userId = " . $user_id);
+    sqlQuery("DELETE FROM user WHERE id = " . $user_id);
 }
 
 function db_select_user_by_id($id)
 {
-    $sql = "select * from tbl_users where userId =" . $id;
+    $sql = "select * from user where id =" . $id;
     return sqlSelect($sql);
 }
 
 function db_select_user($email)
 {
-    $sql = "select * from tbl_users where email ='" . escapeSpecialChars($email) . "'";
+    $sql = "select * from user where email ='" . escapeSpecialChars($email) . "'";
     return sqlSelect($sql);
 }
 
-function db_insert_fotogalerie($name, $user_id)
+function db_insert_galery($name, $user_id)
 {
-    $sql = "insert into tbl_fotogalerien (name)
+    $sql = "insert into galery (name)
             values ('" . escapeSpecialChars($name) . "')";
     sqlQuery($sql);
-    $db_return = sqlSelect("SELECT * FROM tbl_fotogalerien ORDER BY id DESC LIMIT 1");
-    db_insert_users_fotogalerien($user_id, $db_return[0]['id']);
+    $db_return = sqlSelect("SELECT * FROM galery ORDER BY id DESC LIMIT 1");
+    db_insert_users_galery($user_id, $db_return[0]['id']);
     return $db_return;
 }
 
-function db_insert_users_fotogalerien($user_id, $fotogalerie_id)
+function db_insert_users_galery($user_id, $fotogalerie_id)
 {
-    $sql = "insert into tbl_users_fotogalerien (fk_users, fk_fotogalerie)
+    $sql = "insert into user_galery (user_id, galery_id)
             values ('" . escapeSpecialChars($user_id) . "','" . escapeSpecialChars($fotogalerie_id) . "')";
     sqlQuery($sql);
 }
 
 function db_insert_image($path, $galery_id, $thumb_path)
 {
-    $sql = "insert into tbl_fotos (foto_path, fk_fotogalerie, image)
+    $sql = "insert into image (image_path, galery_id, image_thumb_path)
             values ('" . $path . "','" . $galery_id . "', '" . $thumb_path . "')";
     sqlQuery($sql);
 }
 
-function db_select_fotogalerien($user_id)
+function db_select_galery($user_id)
 {
-    $sql = "SELECT * from tbl_fotogalerien, tbl_users_fotogalerien where tbl_users_fotogalerien.fk_fotogalerie = tbl_fotogalerien.id
-            and tbl_users_fotogalerien.fk_users = " . $user_id;
+    $sql = "SELECT * from galery, user_galery where user_galery.galery_id = galery.id
+            and user_galery.user_id = " . $user_id;
     return sqlSelect($sql);
 }
 
-function db_select_fotogalerie_images($id, $user_id)
+function db_select_galery_images($id, $user_id)
 {
-    $sql = "SELECT * from tbl_users_fotogalerien, tbl_fotogalerien, tbl_fotos where tbl_users_fotogalerien.fk_fotogalerie = tbl_fotogalerien.id
-            and tbl_users_fotogalerien.fk_users = " . $user_id . " AND tbl_fotos.fk_fotogalerie = " . $id . " and tbl_fotogalerien.id = " . $id . " group by tbl_fotos.id";
+    $sql = "SELECT * from user_galery, galery, image where user_galery.galery_id = galery.id
+            and user_galery.user_id = " . $user_id . " AND image.galery_id = " . $id . " and galery.id = " . $id . " group by image.id";
     return sqlSelect($sql);
 }
 
-function db_delete_fotogalerie($galery_id, $user_id)
+function db_delete_galery($galery_id, $user_id)
 {
-    $sql_galery = "SELECT * from tbl_users_fotogalerien, tbl_fotogalerien, tbl_fotos where tbl_users_fotogalerien.fk_fotogalerie = tbl_fotogalerien.id
-            and tbl_users_fotogalerien.fk_users = " . $user_id . " and tbl_fotogalerien.id = " . $galery_id . " group by tbl_fotos.id";
+    $sql_images = "SELECT * from user_galery, galery, image where user_galery.galery_id = galery.id
+            and user_galery.user_id = " . $user_id . " and galery.id = " . $galery_id . " group by image.id";
 
-    $images = sqlSelect($sql_galery);
+    $sql_galery = "SELECT * from user_galery, galery where user_galery.galery_id = galery.id
+            and user_galery.user_id = " . $user_id . " and galery.id = " . $galery_id;
+    $images = sqlSelect($sql_images);
+    $galery = sqlSelect($sql_galery);
     if (isset($images[0])) {
         foreach ($images as $image) {
-            unlink($image['foto_path']);
+            unlink($image['image_path']);
             unlink($image['image']);
-            sqlQuery("DELETE FROM tbl_fotos WHERE id =" . $image['id']);
-            sqlQuery("DELETE FROM tbl_fotos_tags WHERE fk_fotos =" . $image['id']);
+            sqlQuery("DELETE FROM image WHERE id =" . $image['id']);
+            sqlQuery("DELETE FROM image_tag WHERE image_id =" . $image['id']);
         }
-        sqlQuery("DELETE FROM tbl_fotogalerien WHERE id =" . $galery_id);
-        sqlQuery("DELETE FROM tbl_users_fotogalerien WHERE fk_fotogalerie =" . $galery_id);
+        sqlQuery("DELETE FROM galery WHERE id =" . $galery_id);
+        sqlQuery("DELETE FROM user_galery WHERE galery_id =" . $galery_id);
+        addMessage('success', 'Die Fotogalerie ' . $images[0]['name'] . ' wurde erfolgreich gelöst');
+    } elseif (isset($galery[0])) {
+        sqlQuery("DELETE FROM galery WHERE id =" . $galery_id);
+        sqlQuery("DELETE FROM user_galery WHERE galery_id =" . $galery_id);
         addMessage('success', 'Die Fotogalerie ' . $images[0]['name'] . ' wurde erfolgreich gelöst');
     } else {
         addMessage('danger', "Du darfst diese Bildergallerie nicht löschen oder sie wurde bereits gelöst.");
@@ -109,28 +116,28 @@ function db_delete_fotogalerie($galery_id, $user_id)
 
 function db_select_image($img_id, $user_id)
 {
-    $sql = "SELECT * from tbl_users_fotogalerien, tbl_fotogalerien, tbl_fotos where tbl_users_fotogalerien.fk_fotogalerie = tbl_fotogalerien.id
-            and tbl_users_fotogalerien.fk_users = " . $user_id . " and tbl_fotos.id = " . $img_id . " group by tbl_fotos.id";
+    $sql = "SELECT * from user_galery, galery, image where user_galery.galery_id = galery.id
+            and user_galery.user_id = " . $user_id . " and image.id = " . $img_id . " group by image.id";
     return sqlSelect($sql);
 }
 
 function db_delete_image($img_id, $user_id)
 {
-    $sql = "SELECT * from tbl_users_fotogalerien, tbl_fotogalerien, tbl_fotos where tbl_users_fotogalerien.fk_fotogalerie = tbl_fotogalerien.id
-            and tbl_users_fotogalerien.fk_users = " . $user_id . " and tbl_fotos.id = " . $img_id . " group by tbl_fotos.id";
+    $sql = "SELECT * from user_galery, galery, image where user_galery.galery_id = galery.id
+            and user_galery.user_id = " . $user_id . " and image.id = " . $img_id . " group by image.id";
     $img_data = sqlSelect($sql);
     if (isset($img_data[0])) {
-        unlink($img_data[0]['foto_path']);
-        unlink($img_data[0]['image']);
-        sqlQuery("DELETE FROM tbl_fotos WHERE id =" . $img_id);
-        sqlQuery("DELETE FROM tbl_fotos_tags WHERE fk_fotos =" . $img_id);
+        unlink($img_data[0]['image_path']);
+        unlink($img_data[0]['image_thumb_path']);
+        sqlQuery("DELETE FROM image WHERE id =" . $img_id);
+        sqlQuery("DELETE FROM image_tag WHERE image_id =" . $img_id);
         addMessage('success', 'Das Bild wurde erfolgreich gelöst');
     } else {
         addMessage('danger', "Du darfst dieses Bild nicht löschen oder es wurde bereits gelöst.");
     }
 }
 
-function db_select_users_fotogalerien($galery_id, $user_id)
+function db_select_users_galery($galery_id, $user_id)
 {
-    return sqlSelect("SELECT * FROM tbl_users_fotogalerien WHERE fk_users = " . $user_id . " and fk_fotogalerie = " . $galery_id);
+    return sqlSelect("SELECT * FROM user_galery WHERE user_id = " . $user_id . " and galery_id = " . $galery_id);
 }

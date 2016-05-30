@@ -14,6 +14,6 @@
 <input id="galery_id" name="galery_id" type="hidden" value="<?php echo getRequestParam('galery_id') ?>">
 <input id="images" name="images[]" type="file" class="file-loading" accept="image/*" multiple>
 <br>
-<a href="index.php?id=fotoalbum&galery_id=<?php echo getValue('galery_id'); ?>" class="btn btn-primary">Weiter</a>
+<a href="index.php?id=galery&galery_id=<?php echo getValue('galery_id'); ?>" class="btn btn-primary">Weiter</a>
 
 <script src="../js/add_images.js"></script>

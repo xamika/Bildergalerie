@@ -7,19 +7,19 @@
  */
 
 // Default-CSS-Klasse zur Formatierung der Eingabefelder
-setValue('cfg_css_class_normal',"txt");
+setValue('cfg_css_class_normal', "txt");
 // Klasse zur Formatierung der Eingabefelder, falls die Eingabeprüfung negativ ausfällt
-setValue('cfg_css_class_error',"err");
+setValue('cfg_css_class_error', "err");
 // Akzeptierte Funktionen Login
-setValue('cfg_func_login', array("login","registration"));
+setValue('cfg_func_login', array("login", "registration"));
 // Akzeptierte Funktionen Memberbereich
-setValue('cfg_func_member', array("fotoalben","logout", "create_fotoalbum", "add_images", "fotoalbum", "show_image", "edit_user"));
+setValue('cfg_func_member', array("galeries", "logout", "galery_create", "image_add", "galery", "image_show", "user_edit"));
 // Inhalt des Login-Menus
-setValue('cfg_menu_login', array("login"=>"Login","registration"=>"Registration"));
+setValue('cfg_menu_login', array("login" => "Login", "registration" => "Registration"));
 // Inhalt des Menus im Memberbereich
-setValue('cfg_menu_member', array("fotoalben"=>"Fotoalben", "logout"=>"Logout", "create_fotoalbum"=>"Fotoalbum hinzufügen", "edit_user"=>"Benutzer"));
+setValue('cfg_menu_member', array("galeries" => "Fotoalben", "galery_create" => "Fotoalbum hinzufügen", "user_edit" => "Benutzer", "logout" => "Logout"));
 
 // Datenbankverbindung herstellen
-$db = mysqli_connect("127.0.0.1", "root", "", "bilderdb");	// Zu Datenbankserver verbinden
+$db = mysqli_connect("127.0.0.1", "root", "", "bilderdb");    // Zu Datenbankserver verbinden
 setValue('cfg_db', $db);
 ?>
