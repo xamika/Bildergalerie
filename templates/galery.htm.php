@@ -7,7 +7,7 @@ if (getValue('images')) {
         ?>
         <form name="show_img" action="index.php?id=image_show&galery_id=<?php echo getValue('galery_id') ?>" method="post">
             <button type="submit" class="btn btn-primary btn-sm" name="img_id" value="<?php echo $value['id'] ?>">
-                Show
+                Anzeigen/Bearbeiten
             </button>
         </form>
         <?php

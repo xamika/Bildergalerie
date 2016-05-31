@@ -64,6 +64,8 @@ function galery_create()
     if (isset($_POST['save'])) {
         if (empty($_POST['name'])) {
             addMessage('danger', 'Sie müssen einen Namen angeben');
+        } elseif (!preg_match("/^[a-zA-Z0-9_.\-@!#$%&;'*+ ]*$/", $_POST['name'])) {
+            addMessage('danger', 'Sie haben ein unerlaubtes Zeichen eingegeben. Erlaubte Zeichen:  a-z A-Z 0-9 _.-@!#$%&;\'*+');
         } else {
             $db_result = db_insert_galery($_POST['name'], getSessionValue("user_id"));
             addMessage('success', 'Fotogalerie wurde erfolgreich erstelt');
@@ -86,10 +88,41 @@ function image_show()
 {
     check_galery_access(getRequestParam('galery_id'), getSessionValue('user_id'));
     if (isset($_REQUEST['img_id']) && isset($_REQUEST['galery_id'])) {
-        setValue('image', db_select_image($_REQUEST['img_id'], getSessionValue('user_id')));
-        setValue('phpmodule', $_SERVER['PHP_SELF'] . "?id=" . __FUNCTION__);
-        return runTemplate("../templates/image_show.htm.php");
+        if (isset($_REQUEST['delete_tag']) && isset($_REQUEST['tag_id'])) {
+            db_delete_image_tag($_REQUEST['tag_id'], $_REQUEST['img_id'], getSessionValue('user_id'));
+            redirect('image_show', ['galery_id' => $_REQUEST['galery_id'], 'img_id' => $_REQUEST['img_id']]);
+        } else {
+            setValue('tags', db_select_image_tag($_REQUEST['img_id']));
+            setValue('image', db_select_image($_REQUEST['img_id'], getSessionValue('user_id')));
+            setValue('phpmodule', $_SERVER['PHP_SELF'] . "?id=" . __FUNCTION__);
+            return runTemplate("../templates/image_show.htm.php");
+        }
     } else {
-
+        addMessage('danger', 'Die Seite konnte nicht aufgerufen werden.');
+        redirect('galeries');
     }
+}
+
+function tag_add() {
+    if (isset($_POST['save']) && isset($_REQUEST['img_id'])) {
+        if (empty($_POST['name'])) {
+            addMessage('danger', 'Sie müssen einen Namen angeben');
+        } elseif (!preg_match("/^[a-zA-Z0-9_.\-@!#$%&;'*+ ]*$/", $_POST['name'])) {
+            addMessage('danger', 'Sie haben ein unerlaubtes Zeichen eingegeben. Erlaubte Zeichen:  a-z A-Z 0-9 _.-@!#$%&;\'*+');
+        } else {
+            db_insert_tag($_POST["name"], $_REQUEST['img_id'], getSessionValue("user_id"));
+            redirect('image_show', ['galery_id' => $_REQUEST['galery_id'], 'img_id' => $_REQUEST['img_id']]);
+        }
+    }
+    setValue('phpmodule', $_SERVER['PHP_SELF'] . "?id=" . __FUNCTION__);
+    return runTemplate("../templates/tag_add.htm.php");
+}
+
+function image_search() {
+    setValue('tags', db_select_tags());
+    if (isset($_REQUEST['search'])) {
+        setValue('images', db_select_search_image_by_tags($_REQUEST['tags'], getSessionValue('user_id')));
+    }
+    setValue('phpmodule', $_SERVER['PHP_SELF'] . "?id=" . __FUNCTION__);
+    return runTemplate("../templates/image_search.htm.php");
 }

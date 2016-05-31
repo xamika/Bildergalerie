@@ -94,7 +94,11 @@ function check_user_data()
     foreach ($_POST as $key => $value) {
         if (empty($_POST[$key])) {
             $error = true;
-            addMessage('danger', ucwords($key) . " field is required ");
+            addMessage('danger', ucwords($key) . " ist ein Pflichtfeld.");
+        } elseif ($key != "password" && $key != "confirm" && !preg_match("/^[a-zA-Z0-9_.\-@!#$%&;'*+ ]*$/", $_POST[$key]))
+        {
+            $error = true;
+            addMessage('danger', "Sie haben ein unerlaubtes Zeichen im Feld " . ucwords($key) . " verwendet. Bitte verwende eines der folgenden Zeichen: a-z A-Z 0-9 _.-@!#$%&;'*+");
         }
     }
     /* Password Matching Validation */

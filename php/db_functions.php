@@ -123,9 +123,7 @@ function db_select_image($img_id, $user_id)
 
 function db_delete_image($img_id, $user_id)
 {
-    $sql = "SELECT * from user_galery, galery, image where user_galery.galery_id = galery.id
-            and user_galery.user_id = " . $user_id . " and image.id = " . $img_id . " group by image.id";
-    $img_data = sqlSelect($sql);
+    $img_data = db_select_image($img_id, $user_id);
     if (isset($img_data[0])) {
         unlink($img_data[0]['image_path']);
         unlink($img_data[0]['image_thumb_path']);
@@ -133,11 +131,77 @@ function db_delete_image($img_id, $user_id)
         sqlQuery("DELETE FROM image_tag WHERE image_id =" . $img_id);
         addMessage('success', 'Das Bild wurde erfolgreich gelöst');
     } else {
-        addMessage('danger', "Du darfst dieses Bild nicht löschen oder es wurde bereits gelöst.");
+        addMessage('danger', "Sie dürfen dieses Bild nicht löschen oder es wurde bereits gelöst.");
     }
 }
 
 function db_select_users_galery($galery_id, $user_id)
 {
-    return sqlSelect("SELECT * FROM user_galery WHERE user_id = " . $user_id . " and galery_id = " . $galery_id);
+    return sqlSelect("SELECT * FROM user_galery WHERE user_id = " . $user_id . " and galery_id = " . escapeSpecialChars($galery_id));
+}
+
+function db_insert_tag($tag_name, $img_id, $user_id)
+{
+    $img_data = db_select_image($img_id, $user_id);
+    if (isset($img_data[0])) {
+        $tag_data = db_select_tag($tag_name);
+        if (isset($tag_data[0]['id'])) {
+            sqlQuery("INSERT INTO image_tag (image_id, tag_id) VALUES ('" . escapeSpecialChars($img_id) . "', " . $tag_data[0]['id'] . ")");
+        } else {
+            sqlQuery("INSERT INTO tag (name) VALUES ('" . escapeSpecialChars($tag_name) . "')");
+            $tag_data = db_select_tag($tag_name);
+            sqlQuery("INSERT INTO image_tag (image_id, tag_id) VALUES ('" . escapeSpecialChars($img_id) . "', " . $tag_data[0]['id'] . ")");
+        }
+        addMessage('success', 'Tag wurde erfolgreich hinzugefügt');
+    } else {
+        addMessage('danger', "Sie dürfen diesem Bild keine Tags hinzufügen");
+    }
+}
+
+function db_select_tag($tag_name)
+{
+    $sql = "SELECT * FROM tag WHERE tag.name = '" . escapeSpecialChars($tag_name) . "'";
+    return sqlSelect($sql);
+}
+
+function db_select_image_tag($img_id)
+{
+    $sql = "SELECT * FROM tag, image_tag WHERE image_tag.image_id = " . escapeSpecialChars($img_id) . " AND tag.id = image_tag.tag_id";
+    return sqlSelect($sql);
+}
+
+function db_delete_image_tag($image_tag_id, $img_id, $user_id)
+{
+    $img_data = db_select_image($img_id, $user_id);
+    if (isset($img_data[0])) {
+        sqlQuery("DELETE FROM image_tag WHERE id = " . escapeSpecialChars($image_tag_id));
+        addMessage('success', 'Tag wurde erfolgreich gelöst');
+    } else {
+        addMessage('danger', "Sie dürfen diesen Tag nicht löschen.");
+    }
+}
+
+function db_select_search_image_by_tags($tags, $user_id)
+{
+    $where_tags = "";
+    $first_time = true;
+    foreach ($tags as $tag_id) {
+        if ($first_time) {
+            $where_tags = ' tag.id = ' . escapeSpecialChars($tags[0]);
+            $first_time = false;
+        } else {
+            $where_tags = $where_tags . ' OR tag.id = ' . escapeSpecialChars($tags[0]);
+        }
+    }
+    $sql = 'SELECT tag.name AS "tag_name", galery.id AS "galery_id", galery.name AS "galery_name", image.image_path, image.image_thumb_path, image.id AS "image_id" FROM user_galery, galery, image, image_tag, tag WHERE
+        user_galery.galery_id = galery.id AND
+        galery.id = image.galery_id AND
+        image_tag.image_id = image.id AND
+        image_tag.tag_id = tag.id AND
+        user_galery.user_id = ' . escapeSpecialChars($user_id) . ' AND ' . $where_tags . ' GROUP BY image.id';
+    return sqlSelect($sql);
+}
+
+function db_select_tags() {
+    return sqlSelect("SELECT * FROM tag");
 }
