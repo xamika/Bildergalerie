@@ -120,7 +120,7 @@ function tag_add() {
 
 function image_search() {
     setValue('tags', db_select_tags());
-    if (isset($_REQUEST['search'])) {
+    if (isset($_REQUEST['search']) && isset($_REQUEST['tags']) && count($_REQUEST['tags']) > 0) {
         setValue('images', db_select_search_image_by_tags($_REQUEST['tags'], getSessionValue('user_id')));
     }
     setValue('phpmodule', $_SERVER['PHP_SELF'] . "?id=" . __FUNCTION__);
