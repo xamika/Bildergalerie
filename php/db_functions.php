@@ -187,12 +187,13 @@ function db_select_search_image_by_tags($tags, $user_id)
     $first_time = true;
     foreach ($tags as $tag_id) {
         if ($first_time) {
-            $where_tags = ' tag.id = ' . escapeSpecialChars($tags[0]);
+            $where_tags = ' (tag.id = ' . escapeSpecialChars($tag_id);
             $first_time = false;
         } else {
-            $where_tags = $where_tags . ' OR tag.id = ' . escapeSpecialChars($tags[0]);
+            $where_tags = $where_tags . ' OR tag.id = ' . escapeSpecialChars($tag_id);
         }
     }
+    $where_tags = $where_tags . ")";
     $sql = 'SELECT tag.name AS "tag_name", galery.id AS "galery_id", galery.name AS "galery_name", image.image_path, image.image_thumb_path, image.id AS "image_id" FROM user_galery, galery, image, image_tag, tag WHERE
         user_galery.galery_id = galery.id AND
         galery.id = image.galery_id AND
