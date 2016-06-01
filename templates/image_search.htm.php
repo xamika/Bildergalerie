@@ -1,3 +1,7 @@
+<!--
+- Für den Input der Tags wurde das Plugin Select 2 Verwendet
+- Quelle: https://select2.github.io/
+-->
 <link rel="stylesheet" href="../bower_components/select2/dist/css/select2.min.css" type="text/css"/>
 <script src="../bower_components/select2/dist/js/select2.min.js"></script>
 <h2>Bild Suchen</h2>
@@ -44,6 +48,7 @@ if (getValue('images')) {
 }
 ?>
 <script>
+    /* Select 2 Plugin auf den Input der Tags aufrufen */
     $(".tags").select2({})
 </script>
 

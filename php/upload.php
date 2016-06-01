@@ -4,6 +4,8 @@
  * User: jajaj
  * Date: 18.05.2016
  * Time: 10:25
+ * Quelle: http://webtips.krajee.com/ajax-based-file-uploads-using-fileinput-plugin/
+ * Dieses File wurde von krajee erstellt und von mir angepasst
  */
 include 'db_functions.php';
 include 'basic_functions.php';

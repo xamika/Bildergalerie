@@ -1,5 +1,7 @@
 /**
  * Created by jajaj on 18.05.2016.
+ * Für den Fileupload wurde das jQuery Plugin bootstrap-fileinput verwendet
+ * Quelle: http://plugins.krajee.com/file-input
  */
 
 $(document).on("ready", function() {

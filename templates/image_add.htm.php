@@ -1,4 +1,7 @@
-
+<!--
+- Für den Fileupload wurde das jQuery Plugin bootstrap-fileinput verwendet
+- Quelle: http://plugins.krajee.com/file-input
+-->
 <link href="../bower_components/bootstrap-fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
 <!-- canvas-to-blob.min.js is only needed if you wish to resize images before upload.
      This must be loaded before fileinput.min.js -->
