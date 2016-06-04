@@ -11,6 +11,10 @@ if (getValue('image')) {
             echo "<br>";
         }
         echo '<img style="max-width: 700px;" src="' . $value['image_path'] . '"><br>';
+        $img_info = getimagesize($value['image_path']);
+        echo '<p>Bildbreite: '. $img_info[0] . 'px</p>';
+        echo '<p>Bildhöhe: '. $img_info[1] . 'px</p>';
+        echo '<p>Grösse: '. filesize($value['image_path']) / 1000 . 'kb</p>';
         echo '<a href="index.php?id=galery&galery_id=' . $_REQUEST['galery_id'] . '&img_id=' . $value['id'] . '&delete" class="btn btn-danger">Bild Löschen</a><br>';
         echo '<a href="index.php?id=tag_add&galery_id=' . $_REQUEST['galery_id'] . '&img_id=' . $value['id'] . '" class="btn btn-primary">Tag hinzufügen</a><br>';
 
