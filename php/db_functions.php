@@ -46,7 +46,7 @@ function db_update_user($params, $password, $user_id)
  */
 function db_delete_user($user_id)
 {
-    $galeries = db_select_galery($user_id);
+    $galeries = db_select_galeries($user_id);
     if (isset($galeries[0])) {
         foreach ($galeries as $galery_value) {
             db_delete_galery($galery_value['id'], $user_id);
@@ -94,6 +94,17 @@ function db_insert_galery($name, $user_id)
     $db_return = sqlSelect("SELECT * FROM galery ORDER BY id DESC LIMIT 1");
     db_insert_users_galery($user_id, $db_return[0]['id']);
     return $db_return;
+}
+
+/**
+ * Ändert den Namen einer Galery
+ *
+ * @param $name
+ */
+function db_update_galery($name)
+{
+    $sql = "update galery set name='" . escapeSpecialChars($name) . "'";
+    sqlQuery($sql);
 }
 
 /**
@@ -153,9 +164,23 @@ function db_insert_image($path, $galery_id, $thumb_path)
  * @param $user_id
  * @return array|string
  */
-function db_select_galery($user_id)
+function db_select_galeries($user_id)
 {
     $sql = "SELECT * from galery, user_galery where user_galery.galery_id = galery.id
+            and user_galery.user_id = " . $user_id;
+    return sqlSelect($sql);
+}
+
+/**
+ * Gibt die Datein einer Galery zurück
+ *
+ * @param $galery_id
+ * @param $user_id
+ * @return array|string
+ */
+function db_select_galery($galery_id, $user_id)
+{
+    $sql = "SELECT * from galery, user_galery where user_galery.galery_id = " . escapeSpecialChars($galery_id) . "
             and user_galery.user_id = " . $user_id;
     return sqlSelect($sql);
 }
@@ -355,6 +380,7 @@ function db_select_search_image_by_tags($tags, $user_id)
  *
  * @return array|string
  */
-function db_select_tags() {
+function db_select_tags()
+{
     return sqlSelect("SELECT * FROM tag");
 }

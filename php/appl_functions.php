@@ -30,7 +30,7 @@ function galeries()
         db_delete_galery($_REQUEST['galery_id'], getSessionValue('user_id'));
         redirect('galeries');
     }
-    setValue('galery', db_select_galery(getSessionValue('user_id')));
+    setValue('galery', db_select_galeries(getSessionValue('user_id')));
     setValue('phpmodule', $_SERVER['PHP_SELF'] . "?id=" . __FUNCTION__);
     return runTemplate("../templates/galeries.htm.php");
 }
@@ -83,6 +83,28 @@ function galery_create()
     }
     setValue('phpmodule', $_SERVER['PHP_SELF'] . "?id=" . __FUNCTION__);
     return runTemplate("../templates/galery_create.htm.php");
+}
+
+/*
+ * Beinhaltet die Anwendungslogik zum bearbeiten einer Galery
+ */
+function galery_update()
+{
+    check_galery_access($_REQUEST['galery_id'], getSessionValue('user_id'));
+    setValue('galery', db_select_galery($_REQUEST['galery_id'], getSessionValue('user_id')));
+    if (isset($_POST['save'])) {
+        if (empty($_POST['name'])) {
+            addMessage('danger', 'Sie müssen einen Namen angeben');
+        } elseif (!preg_match("/^[a-zA-Z0-9_.\-@!#$%&;'*+ ]*$/", $_POST['name'])) {
+            addMessage('danger', 'Sie haben ein unerlaubtes Zeichen eingegeben. Erlaubte Zeichen:  a-z A-Z 0-9 _.-@!#$%&;\'*+');
+        } else {
+            db_update_galery($_POST['name'], getSessionValue("user_id"));
+            addMessage('success', 'Fotogalerie wurde erfolgreich erstelt');
+            redirect('galery', ['galery_id' => $_REQUEST['galery_id']]);
+        }
+    }
+    setValue('phpmodule', $_SERVER['PHP_SELF'] . "?id=" . __FUNCTION__);
+    return runTemplate("../templates/galery_update.htm.php");
 }
 
 /*
