@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: jajaj
+ * User: Tobias Egli
  * Date: 18.05.2016
  * Time: 10:25
  * Quelle: http://webtips.krajee.com/ajax-based-file-uploads-using-fileinput-plugin/

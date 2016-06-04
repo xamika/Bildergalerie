@@ -50,6 +50,9 @@ function login()
     return runTemplate("../templates/user_login.htm.php");
 }
 
+/*
+ * Beinhaltet die Anwendungslogik um sich auszuloggen.
+ */
 function logout()
 {
     setSessionValue("user_id", null);
@@ -57,6 +60,9 @@ function logout()
     redirect('login');
 }
 
+/*
+ * Beinhaltet die Anwendungslogik um die Benutzerdaten zu bearbeiten.
+ */
 function user_edit()
 {
     if (isset($_POST['update_user_data'])) {

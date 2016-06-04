@@ -29,6 +29,12 @@ function runTemplate($template)
     return $inhalt;
 }
 
+/**
+ * Fügt eine neue Message hinzu
+ *
+ * @param $type     Gibt den Typ der Message an (danger, success, info oder warning)
+ * @param $content  Gibt den Content der Message an
+ */
 function addMessage($type, $content) {
     if (!isset($_SESSION['message'])) {
         $_SESSION['message'] = [["type" => $type, "content" => $content]];
@@ -211,6 +217,7 @@ function sqlQuery($sql)
  * Aktives php-Modul noch einmal aufrufen.
  *
  * @param   $id     ID der Funktion, welche aufgerufen werden soll
+ * @params  $params get Parameter welche übertragen werden sollen
  */
 function redirect($id = "", $params = null)
 {
@@ -307,7 +314,12 @@ function passwordHash($passwort)
     return password_hash($passwort, PASSWORD_BCRYPT);
 }
 
-
+/*
+ * Überprüft das eingegebene Passwort
+ *
+ * @param       $passwort
+ * @param       $hash
+ */
 function passwordVerify($passowrt, $hash)
 {
     return password_verify($passowrt, $hash);

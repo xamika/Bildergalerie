@@ -13,7 +13,7 @@ setValue('cfg_css_class_error', "err");
 // Akzeptierte Funktionen Login
 setValue('cfg_func_login', array("login", "registration"));
 // Akzeptierte Funktionen Memberbereich
-setValue('cfg_func_member', array("galeries", "logout", "galery_create", "image_add", "galery", "image_show", "user_edit", "tag_add", "image_search"));
+setValue('cfg_func_member', array("galeries", "logout", "galery_create", "image_add", "galery", "image_show", "user_edit", "tag_add", "image_search", "user_galery_create"));
 // Inhalt des Login-Menus
 setValue('cfg_menu_login', array("login" => "Login", "registration" => "Registration"));
 // Inhalt des Menus im Memberbereich

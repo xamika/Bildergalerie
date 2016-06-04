@@ -6,6 +6,8 @@
 <script src="../bower_components/select2/dist/js/select2.min.js"></script>
 <h2>Bild Suchen</h2>
 
+
+
 <form name="image_search" class="form-horizontal" action="<?php echo getValue('phpmodule') ?>" method="post">
 
     <div class="form-group">
@@ -14,7 +16,20 @@
             <select multiple="true" name="tags[]" id="tags" class="form-control tags">
                 <?php
                 foreach (getValue('tags') as $tag) {
-                    echo '<option value="' . $tag['id'] . '">' . $tag['name'] . '</option>';
+                    if (isset($_REQUEST['tags'])) {
+                        $selected = false;
+                        foreach ($_REQUEST['tags'] as $tag_r) {
+                            if ($tag_r == $tag['id']) {
+                                $selected = true;
+                                echo '<option value="' . $tag['id'] . '" selected>' . $tag['name'] . '</option>';
+                            }
+                        }
+                        if (!$selected) {
+                            echo '<option value="' . $tag['id'] . '">' . $tag['name'] . '</option>';
+                        }
+                    } else {
+                        echo '<option value="' . $tag['id'] . '">' . $tag['name'] . '</option>';
+                    }
                 }
                 ?>
             </select>

@@ -9,6 +9,13 @@
  *
  */
 
+
+/**
+ * Fügt einen Neuen User in die DB ein
+ *
+ * @param $params       Array mit fistname lastname email
+ * @param $password     verschlüsseltes Passwort
+ */
 function db_insert_user($params, $password)
 {
     $sql = "insert into user (firstname, lastname, email, password)
@@ -16,6 +23,13 @@ function db_insert_user($params, $password)
     sqlQuery($sql);
 }
 
+/**
+ * Aktualisiert die User daten
+ *
+ * @param $params       Array mit fistname lastname email
+ * @param $password     verschlüsseltes Passwort
+ * @param $user_id      user id in der DB
+ */
 function db_update_user($params, $password, $user_id)
 {
     $sql = "update user set firstname='" . escapeSpecialChars($params['firstname']) . "',
@@ -25,6 +39,11 @@ function db_update_user($params, $password, $user_id)
     sqlQuery($sql);
 }
 
+/**
+ * Löscht einen User und alle von ihm abhängige Tabellen
+ *
+ * @param $user_id  ID des zu löschenden Users
+ */
 function db_delete_user($user_id)
 {
     $galeries = db_select_galery($user_id);
@@ -36,18 +55,37 @@ function db_delete_user($user_id)
     sqlQuery("DELETE FROM user WHERE id = " . $user_id);
 }
 
+/**
+ * Abfrage eines Users anhand seiner ID
+ *
+ * @param $id               ID des userses
+ * @return array|string     Array mit allen user Daten
+ */
 function db_select_user_by_id($id)
 {
     $sql = "select * from user where id =" . $id;
     return sqlSelect($sql);
 }
 
+/**
+ * Abfrage eines Users anhand seiner Email
+ *
+ * @param $email            Email des Users
+ * @return array|string     Array mit allen user Daten
+ */
 function db_select_user($email)
 {
     $sql = "select * from user where email ='" . escapeSpecialChars($email) . "'";
     return sqlSelect($sql);
 }
 
+/**
+ * Fügt eine neue Galery hinzu
+ *
+ * @param $name             Name der Galery
+ * @param $user_id          User ID
+ * @return array|string     Array mit den Daten der erstellten Galery
+ */
 function db_insert_galery($name, $user_id)
 {
     $sql = "insert into galery (name)
@@ -58,6 +96,12 @@ function db_insert_galery($name, $user_id)
     return $db_return;
 }
 
+/**
+ * Fügt einem User eine neue Galery hinzu
+ *
+ * @param $user_id
+ * @param $fotogalerie_id
+ */
 function db_insert_users_galery($user_id, $fotogalerie_id)
 {
     $sql = "insert into user_galery (user_id, galery_id)
@@ -65,6 +109,37 @@ function db_insert_users_galery($user_id, $fotogalerie_id)
     sqlQuery($sql);
 }
 
+/**
+ * Fügt einem User falls dieser vorhanden ist eine Galery hinzu
+ *
+ * @param $email            Email des Users
+ * @param $fotogalerie_id
+ */
+function db_insert_users_galery_add($email, $fotogalerie_id)
+{
+    $user_data = db_select_user($email);
+    if ($user_data) {
+        $user_galery_data = db_select_users_galery($fotogalerie_id, $user_data[0]['id']);
+        if (!$user_galery_data) {
+            $sql = "insert into user_galery (user_id, galery_id)
+            values ('" . escapeSpecialChars($user_data[0]['id']) . "','" . escapeSpecialChars($fotogalerie_id) . "')";
+            sqlQuery($sql);
+            addMessage('success', 'User wurde erfolgreich berechtigt.');
+        } else {
+            addMessage('danger', 'User mit der Email ' . $email . ' ist bereits berechtigt.');
+        }
+    } else {
+        addMessage('danger', 'User mit der Email ' . $email . ' existiert nicht.');
+    }
+}
+
+/**
+ * Fügt ein neues Bild in die Datenbank ein
+ *
+ * @param $path         Pfad zum Bilder in orginalgrüsse
+ * @param $galery_id
+ * @param $thumb_path   Pfad zum thubnail
+ */
 function db_insert_image($path, $galery_id, $thumb_path)
 {
     $sql = "insert into image (image_path, galery_id, image_thumb_path)
@@ -72,6 +147,12 @@ function db_insert_image($path, $galery_id, $thumb_path)
     sqlQuery($sql);
 }
 
+/**
+ * Gibt alle Galerien eines Users zurück
+ *
+ * @param $user_id
+ * @return array|string
+ */
 function db_select_galery($user_id)
 {
     $sql = "SELECT * from galery, user_galery where user_galery.galery_id = galery.id
@@ -79,6 +160,13 @@ function db_select_galery($user_id)
     return sqlSelect($sql);
 }
 
+/**
+ * Abfrage aller Bilder welche in einer Galery sind
+ *
+ * @param $id               ID der Galery
+ * @param $user_id
+ * @return array|string     array mit allen Bilder Daten
+ */
 function db_select_galery_images($id, $user_id)
 {
     $sql = "SELECT * from user_galery, galery, image where user_galery.galery_id = galery.id
@@ -86,6 +174,12 @@ function db_select_galery_images($id, $user_id)
     return sqlSelect($sql);
 }
 
+/**
+ * Löscht eine Galery
+ *
+ * @param $galery_id
+ * @param $user_id
+ */
 function db_delete_galery($galery_id, $user_id)
 {
     $sql_images = "SELECT * from user_galery, galery, image where user_galery.galery_id = galery.id
@@ -114,6 +208,13 @@ function db_delete_galery($galery_id, $user_id)
     }
 }
 
+/**
+ * Abfrage eines Bildes
+ *
+ * @param $img_id
+ * @param $user_id
+ * @return array|string Array mit den Bild Daten
+ */
 function db_select_image($img_id, $user_id)
 {
     $sql = "SELECT * from user_galery, galery, image where user_galery.galery_id = galery.id
@@ -121,6 +222,12 @@ function db_select_image($img_id, $user_id)
     return sqlSelect($sql);
 }
 
+/**
+ * Löscht ein Bild aus einer Galery
+ *
+ * @param $img_id
+ * @param $user_id
+ */
 function db_delete_image($img_id, $user_id)
 {
     $img_data = db_select_image($img_id, $user_id);
@@ -135,11 +242,25 @@ function db_delete_image($img_id, $user_id)
     }
 }
 
+/**
+ * Abfrage der user_galery tabelle
+ *
+ * @param $galery_id
+ * @param $user_id
+ * @return array|string
+ */
 function db_select_users_galery($galery_id, $user_id)
 {
     return sqlSelect("SELECT * FROM user_galery WHERE user_id = " . $user_id . " and galery_id = " . escapeSpecialChars($galery_id));
 }
 
+/**
+ * Hinzufügen eines neuen Tags zu einem Bild
+ *
+ * @param $tag_name
+ * @param $img_id
+ * @param $user_id
+ */
 function db_insert_tag($tag_name, $img_id, $user_id)
 {
     $img_data = db_select_image($img_id, $user_id);
@@ -158,18 +279,37 @@ function db_insert_tag($tag_name, $img_id, $user_id)
     }
 }
 
+/**
+ * Abfrage eines Tags
+ *
+ * @param $tag_name     Name des gesuchten Tags
+ * @return array|string Array mit den Tag Daten
+ */
 function db_select_tag($tag_name)
 {
     $sql = "SELECT * FROM tag WHERE tag.name = '" . escapeSpecialChars($tag_name) . "'";
     return sqlSelect($sql);
 }
 
+/**
+ * Abfrage aller Tags eines Bildes.
+ *
+ * @param $img_id
+ * @return array|string
+ */
 function db_select_image_tag($img_id)
 {
     $sql = "SELECT * FROM tag, image_tag WHERE image_tag.image_id = " . escapeSpecialChars($img_id) . " AND tag.id = image_tag.tag_id";
     return sqlSelect($sql);
 }
 
+/**
+ * Löschen eines Tags welches einem Bild zugewiesen ist
+ *
+ * @param $image_tag_id
+ * @param $img_id
+ * @param $user_id
+ */
 function db_delete_image_tag($image_tag_id, $img_id, $user_id)
 {
     $img_data = db_select_image($img_id, $user_id);
@@ -181,6 +321,13 @@ function db_delete_image_tag($image_tag_id, $img_id, $user_id)
     }
 }
 
+/**
+ * Sucht nach Bildern welche bestimmte Tags haben
+ *
+ * @param $tags         Array mit allen Tags nach denen gesucht werden soll
+ * @param $user_id
+ * @return array|string Rückgabe der Bild Daten
+ */
 function db_select_search_image_by_tags($tags, $user_id)
 {
     $where_tags = "";
@@ -203,6 +350,11 @@ function db_select_search_image_by_tags($tags, $user_id)
     return sqlSelect($sql);
 }
 
+/**
+ * Gibt alle Tags welche in der Datenbank sind zurück
+ *
+ * @return array|string
+ */
 function db_select_tags() {
     return sqlSelect("SELECT * FROM tag");
 }

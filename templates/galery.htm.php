@@ -17,4 +17,5 @@ if (getValue('images')) {
 }
 ?>
 <a href="index.php?id=image_add&galery_id=<?php echo getRequestParam('galery_id') ?>" class="btn btn-primary">Fotos hinzufügen</a>
+<a href="index.php?id=user_galery_create&galery_id=<?php echo getRequestParam('galery_id') ?>" class="btn btn-primary">User Berechtigen</a>
 

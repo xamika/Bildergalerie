@@ -21,7 +21,7 @@ function getCssClass($name)
 }
 
 /*
- * Beinhaltet die Anwendungslogik zur Anzeige und zum Bearbeiten von allen Fotoalben
+ * Beinhaltet die Anwendungslogik zur Anzeige Löschen aller Fotoalben
  */
 function galeries()
 {
@@ -35,9 +35,12 @@ function galeries()
     return runTemplate("../templates/galeries.htm.php");
 }
 
+/*
+ * Überprüft ob ein User Berechtigt ist diese Galery anzuzeigen oder zu bearbeiten
+ */
 function check_galery_access($galery_id, $user_id)
 {
-    if (isset(db_select_users_galery($galery_id, $user_id)[0])) {
+    if (db_select_users_galery($galery_id, $user_id)) {
         return true;
     } else {
         addMessage("danger", "Du hast keine Berechtigung");
@@ -45,6 +48,9 @@ function check_galery_access($galery_id, $user_id)
     }
 }
 
+/*
+ * Beinhaltet die Anwendungslogik um alle Bilder einer Galery anzuzeigen und einzele Bilder zu löschen
+ */
 function galery()
 {
     check_galery_access(getRequestParam('galery_id'), getSessionValue('user_id'));
@@ -59,6 +65,9 @@ function galery()
     return runTemplate("../templates/galery.htm.php");
 }
 
+/*
+ * Beinhaltet die Anwendungslogik zum erstellen einer Galery
+ */
 function galery_create()
 {
     if (isset($_POST['save'])) {
@@ -76,6 +85,10 @@ function galery_create()
     return runTemplate("../templates/galery_create.htm.php");
 }
 
+/*
+ * Beinhaltet die Anwendungslogik um Bilder einer Galery hinzuzufügen der Upload der
+ * Bilder befindet sich im upload.php File
+ */
 function image_add()
 {
     check_galery_access(getRequestParam('galery_id'), getSessionValue('user_id'));
@@ -84,6 +97,9 @@ function image_add()
     return runTemplate("../templates/image_add.htm.php");
 }
 
+/*
+ * Beinhaltet die Anwendungslogik Um ein Bild anzuzeigen und ein Tag des Bildes zu löschen
+ */
 function image_show()
 {
     check_galery_access(getRequestParam('galery_id'), getSessionValue('user_id'));
@@ -103,6 +119,9 @@ function image_show()
     }
 }
 
+/*
+ * Beinhaltet die Anwendungslogik um ein Tag einem Bild hinzuzufügen
+ */
 function tag_add() {
     if (isset($_POST['save']) && isset($_REQUEST['img_id'])) {
         if (empty($_POST['name'])) {
@@ -118,6 +137,9 @@ function tag_add() {
     return runTemplate("../templates/tag_add.htm.php");
 }
 
+/*
+ * Beinhaltet die Anwendungslogik zn nach Bildern welche Tags haben zu suchen.
+ */
 function image_search() {
     setValue('tags', db_select_tags());
     if (isset($_REQUEST['search']) && isset($_REQUEST['tags']) && count($_REQUEST['tags']) > 0) {
@@ -125,4 +147,23 @@ function image_search() {
     }
     setValue('phpmodule', $_SERVER['PHP_SELF'] . "?id=" . __FUNCTION__);
     return runTemplate("../templates/image_search.htm.php");
+}
+
+/*
+ * Beinhaltet die Anwendungslogik um einen User einer Galery hinzuzufügen
+ */
+function user_galery_create() {
+    check_galery_access($_REQUEST['galery_id'], getSessionValue('user_id'));
+    if (isset($_POST['save']) && isset($_REQUEST['galery_id'])) {
+        if (empty($_POST['email'])) {
+            addMessage('danger', 'Sie müssen eine email angeben');
+        } elseif (!preg_match("/^[a-zA-Z0-9_.\-@!#$%&;'*+ ]*$/", $_POST['name'])) {
+            addMessage('danger', 'Sie haben ein unerlaubtes Zeichen eingegeben. Erlaubte Zeichen:  a-z A-Z 0-9 _.-@!#$%&;\'*+');
+        } else {
+            db_insert_users_galery_add($_POST["email"], $_REQUEST['galery_id']);
+            redirect('galery', ['galery_id' => $_REQUEST['galery_id']]);
+        }
+    }
+    setValue('phpmodule', $_SERVER['PHP_SELF'] . "?id=" . __FUNCTION__);
+    return runTemplate("../templates/user_galery_create.htm.php");
 }
